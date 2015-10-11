@@ -1,0 +1,17 @@
+<ion-view view-title="Ideallist" ngController='HomeController'>
+  <ion-content padding='true' scroll="x">
+  <div class='card list'>
+    <h1>Home</h1>
+
+    <button class="button button-block button-positive" ng-Click="hello()">   </button>
+    <button class="button button-block button-positive" ng-Click="logOut()">  Logout </button>
+
+    <div class="list item">
+    	<div class="item" ng-repeat="prod in produtos.rows">
+    			{{prod.ProdDescricao}}
+    	</div>
+    </div>
+
+</div>
+  </ion-content>
+</ion-view>

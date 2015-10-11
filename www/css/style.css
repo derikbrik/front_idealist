@@ -1,0 +1,50 @@
+/* Empty. Add your own CSS if you like */
+
+
+.produtos-titulo
+{
+	color: #0000ff;
+}
+
+.logo
+{
+
+background: url('/img/iDealList-logo.png');	
+height: 110px;
+width: 150px;
+background-size: cover;
+
+}
+
+.fundo
+{
+background-image: url('/img/fundologin.jpg');
+background-size: contain;
+}
+
+
+
+.item.item-trns {
+	border-color: rgba(0, 0, 0,0 );	
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.7) 5%, rgba(255, 255, 255, 0.5) 75%, rgba(255, 255, 255, 0) 100%);
+ 	box-shadow: 0 0 25px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.6);
+
+
+}
+
+ .item.item-trns:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1), inset 0 0 1px rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.3);
+  
+}
+
+.custom-dark {
+    color : #30393A !important; // text
+    background-color:red!important; // for bg color
+ }
+
+ .fundo-lista
+ {
+background: transparent;
+
+ }
