@@ -9,7 +9,7 @@
 .logo
 {
 
-background: url('/img/iDealList-logo.png');	
+background: url('../img/iDealList-logo.png');	
 height: 110px;
 width: 150px;
 background-size: cover;
@@ -18,7 +18,7 @@ background-size: cover;
 
 .fundo
 {
-background-image: url('/img/fundologin.jpg');
+background-image: url('../img/fundologin.jpg');
 background-size: contain;
 }
 

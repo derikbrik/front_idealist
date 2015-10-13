@@ -1,0 +1,23 @@
+<ion-view view-title="{{lista.ListaDescricao}}">
+ <ion-nav-buttons side="left">
+          <button class="button button-icon button-clear ion-navicon" ng-click="openMenu()"></button>
+        </ion-nav-buttons>  
+  
+
+  <ion-content class="has-header">
+
+Listas
+  <div class="list">
+      <a class="item" ng-repeat="lis in lista.rows" >
+          {{lis}}
+      </a>
+    </div>
+
+    <a href="lista.listas"></a>
+    <a href=""></a>
+    <a href=""></a>
+
+
+   <h1>lista</h11>
+  </ion-content>
+</ion-view>

@@ -1,17 +1,34 @@
-<ion-view view-title="Ideallist" ngController='HomeController'>
-  <ion-content padding='true' scroll="x">
-  <div class='card list'>
-    <h1>Home</h1>
+<ion-view view-title="Ideallist">
+  
+ <!---
+   <ion-nav-buttons side="left">
+          <button class="button button-icon button-clear ion-navicon " ng-click="openMenu()"></button>
+  </ion-nav-buttons>  
 
-    <button class="button button-block button-positive" ng-Click="hello()">   </button>
-    <button class="button button-block button-positive" ng-Click="logOut()">  Logout </button>
+<ion-nav-buttons side="right">
+          <button class="button button-icon button-clear ion-log-out" ng-Click="logOut()"></button>
+</ion-nav-buttons>  
+-->
 
-    <div class="list item">
-    	<div class="item" ng-repeat="prod in produtos.rows">
-    			{{prod.ProdDescricao}}
-    	</div>
+  <ion-content class="has-tabs padding" >
+
+
+  <button class="button  button-block button-positive" ng-Click="CriarLista()">Criar lista</button>
+
+    <div class="item item-divider item-dark">
+            Candy Bars
+    </div>
+      
+    <div class="list">
+      <a class="item" ng-repeat="lista in listas.rows"   href='#/tab/lista/{{lista.idLista}}'>
+          {{lista.ListaDescricao}}
+      </a>
     </div>
 
-</div>
+
+
+
   </ion-content>
+
+
 </ion-view>

@@ -1,37 +1,32 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function($scope) {})
 
-.controller('ChatsCtrl', function($scope, Chats) {
-  // With the new view caching in Ionic, Controllers are only called
-  // when they are recreated or on app start, instead of every page change.
-  // To listen for when this page is active (for example, to refresh data),
-  // listen for the $ionicView.enter event:
-  //
-  //$scope.$on('$ionicView.enter', function(e) {
-  //});
+.controller('HomeController', ['$scope', 'httpG', '$location', function ($scope, httpG, $location) {  
 
-  $scope.chats = Chats.all();
-  $scope.remove = function(chat) {
-    Chats.remove(chat);
-  };
-})
+    $scope.isAuthenticated = false;
+    if (httpG.getToken()) {
+        $scope.isAuthenticated = true;
+        $location.path('/tab/home');
+        
+    } else {
 
-.controller('ChatDetailCtrl', function($scope, $stateParams, Chats) {
-  $scope.chat = Chats.get($stateParams.chatId);
-})
+        $location.path('/login');
+    }
 
-.controller('AccountCtrl', function($scope) {
-  $scope.settings = {
-    enableFriends: true
-  };
-})
+       httpG.get('/api/listas')
+        .success(function (data) {            
+            
+            if (data.success) {
+              $scope.listas=data;  
+            }
+        })
+        .error(function(err){
+          alert(err);
+        });
 
 
-.controller('HomeController', ['$scope', 'httpG', '$location', function ($scope, httpG, $location) {    
-    
-    $scope.hello = function () {
-        httpG.get('/api/produtos')
+$scope.getprodutos = function () {
+       httpG.get('/api/produtos')
         .success(function (data) {            
 
             if (data.success) {
@@ -42,9 +37,18 @@ angular.module('starter.controllers', [])
           alert(err);
         });
 
-    };
+    }
 
-    $scope.teste='Clicando';
+ 
+$scope.golista=function(id_lista)
+{
+
+  $location.path('/lista');
+
+
+}
+
+
 
     $scope.logOut = function () {
         alert("Good bye!");
@@ -56,34 +60,67 @@ angular.module('starter.controllers', [])
 
 
 .controller('MainController', ['$scope', '$location', 'httpG', function ($scope, $location, httpG) {
-    $scope.isAuthenticated = false;
 
+    $scope.isAuthenticated = false;
     if (httpG.getToken()) {
         $scope.isAuthenticated = true;
-        $location.path('/home');
+        $location.path('/tab/home');
         
     } else {
+
         $location.path('/login');
     }
+}])
+
+
+
+.controller('listaController', ['$scope', '$location','$stateParams', 'httpG', function ($scope, $location,$stateParams, httpG )
+ {
+ var id_lista = $stateParams.id_lista;
+
+
+    $scope.isAuthenticated = false;
+    if (httpG.getToken()) {
+        $scope.isAuthenticated = true;              
+
+    } else {
+
+        $location.path('/login');
+    }
+
+   
+    httpG.get('/api/listas/' + id_lista)
+        .success(function (data) {                        
+            if (data.success) {
+           
+              $scope.lista=data;  
+            }
+        })
+        .error(function(err){
+          alert(err);
+        });
+    
 }])
 
 
 .controller('LoginController', ['$scope', '$location', 'httpG', function ($scope, $location, httpG) {
     $scope.user = {};
 
+
     $scope.doLogIn = function () {
+
+      
         httpG.setHost('http://localhost:8083');
         httpG.post('/api/authenticate', {username: $scope.user.username, password: $scope.user.password})
           .success(function (data) {             
             if (data.success) {
+
                 httpG.setToken(data.token);                  
-                $scope.isAuthenticated = true;
-                
-                $location.path('home');
+                $scope.isAuthenticated = true;                                 
+                $location.path('tab/home');
 
             } else
-            {
-            
+            {          
               if( data.codigo==1){
                alert('Usuário inválido');
               }
@@ -96,6 +133,7 @@ angular.module('starter.controllers', [])
 
 
         }).error(function (error) {
+           // alert(err);   
             alert('Falha na conexão');
         });
     };
