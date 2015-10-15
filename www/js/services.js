@@ -1,45 +1,20 @@
 angular.module('starter.services', [])
 
-.factory('Chats', function() {
-  
-})
 
-.factory('produtos', ['$http', function($http) {   
-  return $http.get('http://localhost:8083/api/produtos') 
-            .success(function(data) { 
-              return data; 
-            }) 
-            .error(function(err) { 
-              return err; 
-            }); 
+
+.factory('user',[ '$window', function($windows) {
+    var _iduser = {  value: -1 }
+    return  {
+       setValue:  function (val) {
+            _iduser.value = val;
+          },
+
+      getValue: function() {
+          return _iduser.value;
+        }
+
+    }
 }])
-
-
-.factory('listas', ['$http', function($http) {   
-  return $http.get('http://localhost:8083/api/listas') 
-            .success(function(data) { 
-              return data; 
-            }) 
-            .error(function(err) {               
-              return err; 
-            }); 
-}])
-
-
-/*
-.factory('lista', ['$http', function($http) {   
-  return $http.get('http://localhost:8083/api/listas/:id_lista') 
-            .success(function(data) { 
-              return data; 
-            }) 
-            .error(function(err) {               
-              return err; 
-            }); 
-}])
-
-*/
-
-
 
 
 
@@ -47,7 +22,8 @@ angular.module('starter.services', [])
     var serviceToken, serviceHost, tokenKey;
     tokenKey = 'token';
 
-    serviceHost= 'http://localhost:8083';
+    serviceHost= 'http://api-ideallist.rhcloud.com';
+    //serviceHost="http://localhost:8080"
 
     if (localStorage.getItem(tokenKey)) {
 
@@ -79,21 +55,19 @@ angular.module('starter.services', [])
   
         get: function (uri, params) {
             params = params || {};
-            params['token'] = serviceToken;                        
+            params['token'] = serviceToken;
             return $http.get(serviceHost + uri, {params: params});
+
         },
   
         post: function (uri, params) {            
             params = params || {};
             params['token'] = serviceToken;            
-            
-            datas ={username: params.username,
-                    password: params.password}       
-            
+            datas=params                        ;
             Object.toparams = function ObjecttoParams(obj) {
                       var p = [];
                     for (var key in obj) {
-                          p.push(key + '=' + encodeURIComponent(obj[key])); 
+                          p.push(key + '=' + encodeURIComponent(obj[key]));
                       }
                       return p.join('&');
               };
@@ -102,8 +76,7 @@ angular.module('starter.services', [])
                 method: 'POST',
                 url: serviceHost + uri,
                 data: Object.toparams(datas),
-                timeout:5000, 
-                headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}                
 })
                                     
         }

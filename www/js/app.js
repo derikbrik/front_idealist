@@ -5,12 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services','ngCordova'])
 
-.run(function($ionicPlatform) {
-
+.run(function($ionicPlatform,$rootScope) {
   $ionicPlatform.ready(function() {
-    
+
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -22,7 +21,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
       // org.apache.cordova.statusbar required
       StatusBar.styleLightContent();
     }
-  })
+  });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -51,41 +50,54 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
 
   .state('tab.home', {
     url: '/home',
+    cache:false,
     views: {
       'tab-home': {
-        templateUrl: 'templates/tab-home.html',
-        controller: 'HomeController'
+        templateUrl: 'templates/tab-home.html'
+        //controller: 'ListaController'
       }
     }
   })
 
   .state('tab.scan', {
       url: '/scan',
+      cache:false,
       views: {
         'tab-scan': {
-          templateUrl: 'templates/tab-scan.html'
-        //  controller: 'ScanCrtl'
+          templateUrl: 'templates/tab-scan.html',
+         controller: 'ScanController'
         }
       }
     })
- 
-
-
-.state('tab.lista', {
-      url: '/lista/:id_lista',
-      views: {
-        'tab-lista': {
-          templateUrl: 'templates/tab-lista.html',
-          controller: 'listaController'
-        }
-      }
-    })
-
-
-
 
     
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/login');
+  .state('tab.lista', {
+    url: '/lista',
+    cache:false,
+    views: {
+      'tab-lista': {
+        templateUrl: 'templates/tab-listas.html'
+        //controller: 'ListaController'
+      }
+    }
+  })
 
-})
+
+  .state('tab.lista-detail', {
+    url: '/home/:id_lista',
+    views: {
+      'tab-home': {
+        templateUrl: 'templates/tab-lista.html',
+        controller: 'ListaDetailsController'
+      }
+    }
+  })
+
+
+
+
+
+  // if none of the above states are matched, use this as the fallback
+  $urlRouterProvider.otherwise('tab/home');
+
+});

@@ -1,34 +1,34 @@
-<ion-view view-title="Ideallist">
-  
- <!---
-   <ion-nav-buttons side="left">
-          <button class="button button-icon button-clear ion-navicon " ng-click="openMenu()"></button>
-  </ion-nav-buttons>  
-
-<ion-nav-buttons side="right">
-          <button class="button button-icon button-clear ion-log-out" ng-Click="logOut()"></button>
-</ion-nav-buttons>  
--->
-
-  <ion-content class="has-tabs padding" >
-
-
-  <button class="button  button-block button-positive" ng-Click="CriarLista()">Criar lista</button>
-
-    <div class="item item-divider item-dark">
-            Candy Bars
-    </div>
+<ion-view view-title='Idealist' ng-controller='ListaController'>
+  <ion-content padding='true' scroll="x">
       
+    <button class="button button-block button-positive" ng-click="openModal()">Criar listas  </button>    
     <div class="list">
-      <a class="item" ng-repeat="lista in listas.rows"   href='#/tab/lista/{{lista.idLista}}'>
-          {{lista.ListaDescricao}}
-      </a>
+      <div class="item item-divider">Minhas listas</div>          
+      <a class="item  item-icon-right " ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}"  >{{mlis.ListaDescricao}}  <i class="icon ion-trash-a"></i></a>          
     </div>
-
-
-
-
   </ion-content>
 
-
+   <ion-footer-bar align-title="left" class="bar-dark" >
+        <button class="button  button-clear icon ion-log-out" ng-Click="logOut()"></button>
+</ion-footer-bar>
 </ion-view>
+
+<script id="lista-modal.html" type="text/ng-template" >
+  <div class="modal">
+    <ion-header-bar>
+      <h1 class="title">Criar nova lista</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Descricao</span>
+          <input type="text" ng-model="modal.Descricao">
+        </label>        
+          {{Descricao}}
+      <button class="button button-full button-positive" ng-click="closeModal()">Criar</button>
+    </ion-content>
+  </div>
+</script>
+
+
+
