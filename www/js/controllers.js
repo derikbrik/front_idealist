@@ -29,7 +29,20 @@ angular.module('starter.controllers', [])
         $scope.codigo=938392;
         $cordovaBarcodeScanner.scan()
           .then( function(imgCode) {
-                  $scope.codigo=938392;//imgCode.text;
+                  $scope.codigo=imgCode.text;
+
+              httpG.get('/api/produto/'+ $rootScope.idUser)
+              .success(function(data){
+                  if (data.success){
+                      $scope.lista=data.rows;              
+                  }
+                })
+                .error(function (error) {
+                    alert('Falha na obtenção da lista');
+              });
+
+
+
         }, function(error){
               alert('Ocorreu o seguinte erro: ' + error);
         });
@@ -41,10 +54,7 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('ListaController',['$scope','$location','httpG','$stateParams','$rootScope','user', '$ionicModal', function($scope,$location,httpG,$stateParams,$rootScope,user, $ionicModal){                      
-
-
-
+.controller('ListaController',['$scope','$location','httpG','$stateParams','$rootScope','user', '$ionicModal','$ionicActionSheet', function($scope,$location,httpG,$stateParams,$rootScope,user, $ionicModal,$ionicActionSheet){                      
 
        httpG.get('/api/listas/'+ $rootScope.idUser)
           .success(function(data){
@@ -68,10 +78,9 @@ angular.module('starter.controllers', [])
             $scope.modal.show()
         }
 
-      $scope.closeModal = function() {
-
-
+      $scope.salvarLista = function() {
           
+          alert($scope.modal.Descricao  +  "   " + $rootScope.idUser);
            httpG.post('/api/listas/'+ $rootScope.idUser,{listaDescricao:$scope.modal.Descricao})
           .success(function(data){
 
@@ -87,7 +96,7 @@ angular.module('starter.controllers', [])
            
           })
           .error(function (error) {
-            alert('Falha na obtenção da lista');
+            alert('Falha na gravação da nova lista');
         });
 
             $scope.modal.hide();
@@ -98,6 +107,11 @@ angular.module('starter.controllers', [])
         });
 
 
+    $scope.closeModal = function() {   
+        $scope.Descricao="";
+        $scope.modal.hide();
+      }
+
 
     $scope.logOut = function () {
         alert("Good bye!");
@@ -107,7 +121,67 @@ angular.module('starter.controllers', [])
     };
 
 
+    $scope.showMenuLista = function(idLista) {
+   
+     var hideSheet = $ionicActionSheet.show({
+      buttons: [
+         { text: 'Compartilhar lista' },
+        { text: 'Renomear' },
+        {text:'Excluir'}
 
+
+      ],      
+      titleText: 'O que deseja fazer com a lista?',
+      cancelText: 'Cancelar',
+      cancel: function() {
+        // add cancel code..
+        },
+       buttonClicked: function(index) {
+
+          switch(index)
+          {
+            case 1:
+
+              
+
+
+              break;
+            case 2:                  
+                httpG.delete('/api/lista/'+ idLista)
+                  .success(function(data){
+                      httpG.get('/api/listas/'+ $rootScope.idUser)
+                      .success(function(data){
+                        if (data.success){
+                            $scope.lista=data.rows;              
+                        }
+                      })
+                      .error(function (error) {
+                          alert('Falha na obtenção da lista');
+                      });          
+                  })
+                  .error(function (error) {
+                      alert('Falha na exclusão da lista');
+                  });
+
+
+              break;
+            case 3:
+
+              break;
+          }
+        
+           return true;
+
+
+       }
+   });
+
+
+
+
+   
+
+    }
 
 }])
 
@@ -128,7 +202,6 @@ angular.module('starter.controllers', [])
 
 .controller('ListaDetailsController',['$scope','$location','httpG','$stateParams', function($scope,$location,httpG,$stateParams){
   var id_lista=$stateParams.id_lista;    
-
         //  httpG.setHost('http://localhost:8083');
           httpG.get('/api/listaprodutos/'+ id_lista)
           .success(function(data){
@@ -139,6 +212,23 @@ angular.module('starter.controllers', [])
           .error(function (error) {
             alert('Falha na obtenção da lista');
         });
+
+/*
+          $scope.autocompletar=function(strDescricao)
+          {
+                    
+           httpG.get('/api/produtos/desc/'+ strDescricao )
+          .success(function(data){
+            if (data.success){
+              $scope.lprodutos=data.rows;
+            }
+          })
+          .error(function (error) {
+            alert('Falha na obtenção da lista');
+          });
+        }
+*/
+
 }])
 
 

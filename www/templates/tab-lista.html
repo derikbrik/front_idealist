@@ -1,18 +1,24 @@
 
 <ion-view view-title={{lista[0].ListaDescricao}} >
   <ion-content padding='true' scroll="x">    
+  <div class="list">
+  	<label class="item item-input">
+    	<input type="text" placeholder="Buscar ou adicionar produto.">
+    	<a class="button button-icon icon ion-search"></a>
+  </label>
+  </div>
+
 <div class="list">
-<div class='item item-divider'>Lista: {{lista[0].ListaDescricao}}</div>
+<div class='item item-divider'>Lista: {{lista[0].ListaDescricao}} </div>
   <a class="item  item-icon-left "   ng-repeat='listprod in lista'  href="#">
     <i class="icon ion-leaf"></i>    
-    {{listprod.ProdDescricao}}
-    
-    <span class="item-note">{{listprod.lstProdQuantidade}} X Un: {{listprod.ProdUnidade}}  </span>
+    {{listprod.ProdDescricao}}    
+    <span class="item-note">{{listprod.lstProdQuantidade}} {{listprod.ProdUnidade}}  </span>
   </a>
 
 </div>
 
 
-
+	
   </ion-content>
 </ion-view>

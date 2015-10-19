@@ -2,10 +2,15 @@
   <ion-content padding='true' scroll="x">
       
     <button class="button button-block button-positive" ng-click="openModal()">Criar listas  </button>    
+
     <div class="list">
       <div class="item item-divider">Minhas listas</div>          
-      <a class="item  item-icon-right " ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}"  >{{mlis.ListaDescricao}}  <i class="icon ion-trash-a"></i></a>          
+
+      <a class="item  item-icon-right " nav-direction="forward"  on-hold="showMenuLista(mlis.idLista)" ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}"  >{{mlis.ListaDescricao}}  <i class="icon ion-chevron-right"></i></a>          
+
     </div>
+
+
   </ion-content>
 
    <ion-footer-bar align-title="left" class="bar-dark" >
@@ -25,6 +30,7 @@
           <input type="text" ng-model="modal.Descricao">
         </label>        
           {{Descricao}}
+      <button class="button button-full button-positive" ng-click="salvarLista()">Criar</button>
       <button class="button button-full button-positive" ng-click="closeModal()">Criar</button>
     </ion-content>
   </div>

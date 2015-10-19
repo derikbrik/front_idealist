@@ -22,8 +22,8 @@ angular.module('starter.services', [])
     var serviceToken, serviceHost, tokenKey;
     tokenKey = 'token';
 
-    serviceHost= 'http://api-ideallist.rhcloud.com';
-    //serviceHost="http://localhost:8080"
+    //serviceHost= 'http://api-ideallist.rhcloud.com';
+    serviceHost="http://localhost:8080"
 
     if (localStorage.getItem(tokenKey)) {
 
@@ -60,6 +60,7 @@ angular.module('starter.services', [])
 
         },
   
+        
         post: function (uri, params) {            
             params = params || {};
             params['token'] = serviceToken;            
@@ -71,15 +72,58 @@ angular.module('starter.services', [])
                       }
                       return p.join('&');
               };
-          
-         return $http({
+             return $http({
                 method: 'POST',
                 url: serviceHost + uri,
                 data: Object.toparams(datas),
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'}                
-})
+                })
                                     
-        }
+        },
+
+        put: function (uri, params) {            
+            params = params || {};
+            params['token'] = serviceToken;            
+            datas=params;
+            Object.toparams = function ObjecttoParams(obj) {
+                      var p = [];
+                    for (var key in obj) {
+                          p.push(key + '=' + encodeURIComponent(obj[key]));
+                      }
+                      return p.join('&');
+              };
+             return $http({
+                method: 'PUT',
+                url: serviceHost + uri,
+                data: Object.toparams(datas),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}                
+                })
+                                    
+        },        
+
+
+         delete: function (uri, params) {            
+            params = params || {};
+            params['token'] = serviceToken;            
+            datas=params;
+            Object.toparams = function ObjecttoParams(obj) {
+                      var p = [];
+                    for (var key in obj) {
+                          p.push(key + '=' + encodeURIComponent(obj[key]));
+                      }
+                      return p.join('&');
+              };
+             return $http({
+                method: 'DELETE',
+                url: serviceHost + uri,
+                data: Object.toparams(datas),
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}                
+                })
+                                    
+        },
+  
+
+
     };
 }]);
 
