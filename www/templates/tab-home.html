@@ -6,7 +6,7 @@
     <div class="list">
       <div class="item item-divider">Minhas listas</div>          
 
-      <a class="item  item-icon-right " nav-direction="forward"  on-hold="showMenuLista(mlis.idLista)" ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}"  >{{mlis.ListaDescricao}}  <i class="icon ion-chevron-right"></i></a>          
+      <a class="item  item-icon-right " nav-direction="forward"  on-hold="showMenuLista(mlis.idLista)" ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}">{{mlis.ListaDescricao}}  <i class="icon icon-accessory ion-chevron-right"></i></a>          
 
     </div>
 
@@ -24,14 +24,20 @@
       <h1 class="title">Criar nova lista</h1>
     </ion-header-bar>
     <ion-content>
-      <div class="list">
+      <div class="list">              
         <label class="item item-input">
-          <span class="input-label">Descricao</span>
-          <input type="text" ng-model="modal.Descricao">
+            <span class="input-label">Descricao</span>
+            <input type="text" ng-model="modal.Descricao">
         </label>        
+      </div>
+
+
+
           {{Descricao}}
-      <button class="button button-full button-positive" ng-click="salvarLista()">Criar</button>
-      <button class="button button-full button-positive" ng-click="closeModal()">Criar</button>
+      <div class="button-bar">
+      <button class="button button-positive" ng-click="salvarLista()">Criar</button>      
+      <button class="button button-positive" ng-click="closeModal()">Cancelar</button>
+      </div>
     </ion-content>
   </div>
 </script>

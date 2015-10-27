@@ -2,15 +2,15 @@ angular.module('starter.services', [])
 
 
 
-.factory('user',[ '$window', function($windows) {
-    var _iduser = {  value: -1 }
+.factory('usuario',[ '$window', function($window) {
+
     return  {
        setValue:  function (val) {
-            _iduser.value = val;
+            $window.localStorage.setItem('idUser',val);
           },
 
       getValue: function() {
-          return _iduser.value;
+          return $window.localStorage.getItem('idUser');
         }
 
     }
@@ -22,8 +22,8 @@ angular.module('starter.services', [])
     var serviceToken, serviceHost, tokenKey;
     tokenKey = 'token';
 
-    //serviceHost= 'http://api-ideallist.rhcloud.com';
-    serviceHost="http://localhost:8080"
+    serviceHost= 'http://api-ideallist.rhcloud.com';
+    //serviceHost="http://localhost:8080"
 
     if (localStorage.getItem(tokenKey)) {
 
@@ -54,8 +54,8 @@ angular.module('starter.services', [])
 
   
         get: function (uri, params) {
-            params = params || {};
-            params['token'] = serviceToken;
+            params = params || {};            
+            params['token'] = serviceToken;            
             return $http.get(serviceHost + uri, {params: params});
 
         },

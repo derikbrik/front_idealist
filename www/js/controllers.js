@@ -31,7 +31,7 @@ angular.module('starter.controllers', [])
           .then( function(imgCode) {
                   $scope.codigo=imgCode.text;
 
-              httpG.get('/api/produto/'+ $rootScope.idUser)
+              httpG.get('/api/produto/'+ $scope.codigo)
               .success(function(data){
                   if (data.success){
                       $scope.lista=data.rows;              
@@ -54,10 +54,12 @@ angular.module('starter.controllers', [])
 
 
 
-.controller('ListaController',['$scope','$location','httpG','$stateParams','$rootScope','user', '$ionicModal','$ionicActionSheet', function($scope,$location,httpG,$stateParams,$rootScope,user, $ionicModal,$ionicActionSheet){                      
+.controller('ListaController',['$scope','$location','httpG','$stateParams','$rootScope','usuario', '$ionicModal','$ionicActionSheet', function($scope,$location,httpG,$stateParams,$rootScope,usuario, $ionicModal,$ionicActionSheet){                      
 
-       httpG.get('/api/listas/'+ $rootScope.idUser)
-          .success(function(data){
+
+//Carrega lista inicial
+       httpG.get('/api/listas/' + usuario.getValue())      
+          .success(function(data){            
             if (data.success){
               $scope.lista=data.rows;              
             }
@@ -66,7 +68,7 @@ angular.module('starter.controllers', [])
             alert('Falha na obtenção da lista');
         });
 
-
+//Funcao para modal criar lista
        $ionicModal.fromTemplateUrl('lista-modal.html', {
             scope: $scope,
             animation: 'slide-in-up'
@@ -78,13 +80,13 @@ angular.module('starter.controllers', [])
             $scope.modal.show()
         }
 
+//salva a lista 
       $scope.salvarLista = function() {
           
-          alert($scope.modal.Descricao  +  "   " + $rootScope.idUser);
-           httpG.post('/api/listas/'+ $rootScope.idUser,{listaDescricao:$scope.modal.Descricao})
+          alert($scope.modal.Descricao  +  "   " + usuario.getValue());
+           httpG.post('/api/listas/' + usuario.getValue(),{listaDescricao:$scope.modal.Descricao})
           .success(function(data){
-
-              httpG.get('/api/listas/'+ $rootScope.idUser)
+              httpG.get('/api/listas/'+ usuario.getValue())
                 .success(function(data){
                   if (data.success){
                       $scope.lista=data.rows;              
@@ -185,24 +187,12 @@ angular.module('starter.controllers', [])
 
 }])
 
-/*
-.controller('ListaDetailsController',['$scope','$location','httpG','$stateParams', function($scope,$location,httpG,$stateParams){
-  var id_lista=$stateParams.id_lista;    
-          httpG.setHost('http://localhost:8083');
-          httpG.get('/api/listas/'+ id_lista)
-          .success(function(data){
-            if (data.success){
-              $scope.lista=data.rows;
-            }
-          })
-          .error(function (error) {
-            alert('Falha na obtenção da lista');
-        });
-}])*/
 
-.controller('ListaDetailsController',['$scope','$location','httpG','$stateParams', function($scope,$location,httpG,$stateParams){
-  var id_lista=$stateParams.id_lista;    
-        //  httpG.setHost('http://localhost:8083');
+.controller('ListaDetailsController',['$scope','$location','httpG','$stateParams','$ionicModal','$ionicLoading', function($scope,$location,httpG,$stateParams,$ionicModal,$ionicLoading){
+  $scope.ShowDelete=false;
+       var id_lista=$stateParams.id_lista;            
+         
+         /* var id_lista=$stateParams.id_lista;            
           httpG.get('/api/listaprodutos/'+ id_lista)
           .success(function(data){
             if (data.success){
@@ -211,23 +201,184 @@ angular.module('starter.controllers', [])
           })
           .error(function (error) {
             alert('Falha na obtenção da lista');
-        });
+        });*/
+    
+        $ionicLoading.show({
+          template: 'Aguarde... <p><p><ion-spinner icon="android" class="spinner-positive"></ion-spinner>'
+      });
 
-/*
-          $scope.autocompletar=function(strDescricao)
-          {
-                    
-           httpG.get('/api/produtos/desc/'+ strDescricao )
+        $scope.AtualizarLista=function(id_lista){ 
+          httpG.get('/api/listaprodutos/'+ id_lista)
           .success(function(data){
             if (data.success){
-              $scope.lprodutos=data.rows;
+              $scope.lista=data.rows;
+              $ionicLoading.hide();
             }
           })
           .error(function (error) {
             alert('Falha na obtenção da lista');
-          });
+        });
         }
-*/
+              $scope.AtualizarLista(id_lista);
+
+
+      $ionicModal.fromTemplateUrl('produto-modal.html',
+        {
+            scope: $scope,
+            animation: 'slide-in-up'
+        }).then(function(modal) {
+              $scope.modal = modal              
+              $scope.modal.idfLista=id_lista;
+              $scope.modal.strDescricao="";
+        })  
+
+        $scope.openModal = function() {
+            $scope.modal.show()
+        }
+
+        $scope.$on('$destroy', function() {
+            $scope.modal.remove();
+        });
+
+
+    $scope.closeModal = function() {   
+        $scope.Descricao="";
+        $scope.modal.hide();
+      }
+
+
+    $scope.logOut = function () {
+        alert("Good bye!");
+        httpG.removeToken();
+        $scope.isAuthenticated = false;
+        $location.path('login');
+    };
+
+
+    $scope.ExibirBotaoDelete=function()
+    {
+
+      $scope.ShowDelete = !($scope.ShowDelete);
+
+    }
+
+
+    $scope.Remover=function(idLista)
+      {
+
+      
+      
+        httpG.delete('/api/listaprodutos/'+ idLista)
+            .success(function(data){  
+            if (data.success){          
+
+            httpG.get('/api/listaprodutos/'+ id_lista)
+                .success(function(data){                                    
+                  if (data.success){
+                      $scope.lista=data.rows;
+                     
+                  }
+                   else
+                  {
+
+                    if (data.erro==1451)
+                      {
+                        alert("Produto não pode ser removido, por fazer parte de um registro de preços.");
+
+                      }else
+                       {
+                          alert("Erro não identificado.");
+                      }
+                    }
+
+                  
+                $scope.ExibirBotaoDelete();
+              })
+            .error(function (error) {
+                  alert('Falha na obtenção da lista');
+            });
+
+                alert('Produto removido da lista')                ;
+            }
+          })
+          .error(function (error) {
+            alert('Falha na exclusão do item');
+          });        
+
+
+        
+
+    }
+
+
+
+
+
+}])
+
+.controller('ModalCtrl',['$scope','httpG','$ionicLoading', function($scope,httpG,$ionicLoading)
+{
+
+
+    
+
+
+    $scope.selecionarProduto=function(idProduto)
+    {
+      $ionicLoading.show({
+          template: 'Aguarde... <p><p><ion-spinner icon="android" class="spinner-positive"></ion-spinner>'
+      })
+      
+      datas = {idfLista: $scope.modal.idfLista, idfProduto: idProduto}
+
+      httpG.post('/api/listaprodutos/',datas )
+            .success(function(data){                
+
+              $scope.AtualizarLista($scope.modal.idfLista);
+            /*if (data.success){        
+                  
+                  httpG.get('/api/listaprodutos/'+ $scope.modal.idfLista)                  
+                  .success(function(datalista){                                        
+                    if (datalista.success){                      
+                        $scope.lista=datalista.rows;                                                    
+                  }})
+              .error(function(err)
+                {
+                  alert(err);
+                })*/
+
+            $ionicLoading.hide();
+                $scope.modal.hide();
+            
+          
+          })
+          .error(function (error) {
+            alert('Falha na obtenção da lista');
+          });        
+
+
+
+//      idfLista
+  //    idfProduto
+
+      
+    }
+
+    $scope.change = function(_strDescricao) {
+        if (_strDescricao=='')
+            _strDescricao=-111111;
+        httpG.get('/api/produtos/desc/'+ _strDescricao )
+            .success(function(data){  
+            if (data.success){
+                
+                  $scope.lprodutos=data.rows; 
+
+            }
+          })
+          .error(function (error) {
+            alert('Falha na obtenção da lista');
+          });        
+    };
 
 }])
 
@@ -249,10 +400,9 @@ angular.module('starter.controllers', [])
 }])
 
 
-.controller('LoginController', ['$scope', '$location', 'httpG','$rootScope','user', function ($scope, $location, httpG, $rootScope, user) {
-        $scope.user = {}        
-        $rootScope.idUser=-1;
-
+.controller('LoginController', ['$scope', '$location', 'httpG','$rootScope','usuario', function ($scope, $location, httpG, $rootScope, usuario) {
+        $scope.user = {}                
+        
 
         $scope.doLogIn = function () {        
                     
@@ -263,8 +413,8 @@ angular.module('starter.controllers', [])
             if (data.success) {
                 httpG.setToken(data.token);                  
                 $scope.isAuthenticated = true;                
-                  $rootScope.idUser=data.idUser;                
-                  user.setValue= $rootScope.idUser;                         
+                   
+                  usuario.setValue(data.idUser);               
                 $location.path('home');
 
             } else
@@ -288,5 +438,6 @@ angular.module('starter.controllers', [])
 
     $scope.doLogOut = function () {
         httpG.removeToken();
+        
     };
 }])

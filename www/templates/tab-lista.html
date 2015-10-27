@@ -1,24 +1,56 @@
 
 <ion-view view-title={{lista[0].ListaDescricao}} >
-  <ion-content padding='true' scroll="x">    
+  <ion-content class="has-header padding">    
   <div class="list">
-  	<label class="item item-input">
-    	<input type="text" placeholder="Buscar ou adicionar produto.">
-    	<a class="button button-icon icon ion-search"></a>
-  </label>
-  </div>
-
-<div class="list">
-<div class='item item-divider'>Lista: {{lista[0].ListaDescricao}} </div>
-  <a class="item  item-icon-left "   ng-repeat='listprod in lista'  href="#">
-    <i class="icon ion-leaf"></i>    
-    {{listprod.ProdDescricao}}    
-    <span class="item-note">{{listprod.lstProdQuantidade}} {{listprod.ProdUnidade}}  </span>
-  </a>
-
+  	<div class="button-bar">
+          <a class="button button-clear button-positive icon ion-plus-round" ng-click="openModal()"></a>
+          <a class="button button-clear button-positive icon ion-search"></a>
+          <a class="button button-clear button-positive icon ion-ios-barcode-outline"></a>
+          <a class="button button-clear button-positive icon ion-android-delete" ng-click='ExibirBotaoDelete()'></a>        
 </div>
-
-
-	
+  </div>
   </ion-content>
+  <ion-content  class="has-header has-subheader padding">    
+
+<ion-list show-delete="ShowDelete">
+<div class='item item-divider'>Lista: {{lista[0].ListaDescricao}} </div>  
+    <ion-item class="item "   ng-repeat='listprod in lista'  href="#">
+    <ion-delete-button class="ion-android-remove-circle" ng-click='Remover({{listprod.idListaProdutos}})'></ion-delete-button>    
+    {{listprod.ProdDescricao}}
+    <span class="item-note">{{listprod.lstProdQuantidade}} {{listprod.ProdUnidade}}  </span>
+  </ion-item>  
+</ion-list>	
+
+
+
+  </ion-content>
+
+
 </ion-view>
+
+
+<script id="produto-modal.html" type="text/ng-template" >
+    
+  <div class="modal"  ng-controller="ModalCtrl">
+    <ion-header-bar>
+      <h1 class="title">Selecionar produto</h1>
+      <button class="button button-positive" ng-click="closeModal()">Cancelar</button>
+
+    </ion-header-bar>        
+    <div class="list has-header">
+        <label class="item item-input item-energized">
+            <span class="input-label">Descricao</span><input type="text" ng-model="strDescricao" ng-change="change(strDescricao)" >
+        </label>              
+    </div>
+    <ion-content class="has-header has-subheader">  
+      <div class="list">        
+          <a class="item"  ng-repeat="mprod in lprodutos"  ng-click="selecionarProduto({{mprod.idProduto}})" >{{mprod.ProdDescricao}} </a>          
+      </div>
+        
+      </>
+    </ion-content>
+
+
+</div>  
+</script>
+
