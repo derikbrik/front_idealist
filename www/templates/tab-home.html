@@ -1,10 +1,10 @@
 <ion-view view-title='Idealist' >
   <ion-content padding='true' scroll="x">
       
-    <button class="button button-block button-positive" ng-click="openModal()">Criar listas  </button>    
+    <button class="button button-block button-balanced" ng-click="openModal()">Criar listas  </button>    
 
     <div class="list">
-      <div class="item item-divider">Minhas listas</div>          
+      <div class="item item-divider item-balanced">Minhas listas</div>          
 
       <a class="item  item-icon-right " nav-direction="forward"  on-hold="showMenuLista(mlis.idLista)" ng-repeat="mlis in lista" href="#/tab/home/{{mlis.idLista}}">{{mlis.ListaDescricao}}  <i class="icon icon-accessory ion-chevron-right"></i></a>          
 
@@ -13,8 +13,8 @@
 
   </ion-content>
 
-   <ion-footer-bar align-title="left" class="bar-dark" >
-        <button class="button  button-clear icon ion-log-out" ng-Click="logOut()"></button>
+   <ion-footer-bar align-title="left" class="bar-dark" >        
+        <a class="button button-clear button-right button-balanced icon ion-android-exit" ng-Click="logOut()"></a>
 </ion-footer-bar>
 </ion-view>
 
@@ -35,8 +35,8 @@
 
           {{Descricao}}
       <div class="button-bar">
-      <button class="button button-positive" ng-click="salvarLista()">Criar</button>      
-      <button class="button button-positive" ng-click="closeModal()">Cancelar</button>
+      <button class="button button-balanced" ng-click="salvarLista()">Criar</button>      
+      <button class="button button-balanced" ng-click="closeModal()">Cancelar</button>
       </div>
     </ion-content>
   </div>

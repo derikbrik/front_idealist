@@ -25,23 +25,20 @@ angular.module('starter.controllers', [])
 
 .controller('ScanController',['$scope', '$cordovaBarcodeScanner', function($scope, $cordovaBarcodeScanner){
     
-    $scope.LerCodigo = function() {
-        $scope.codigo=938392;
+    $scope.LerCodigo = function() {        
         $cordovaBarcodeScanner.scan()
           .then( function(imgCode) {
                   $scope.codigo=imgCode.text;
 
-              httpG.get('/api/produto/'+ $scope.codigo)
+              httpG.get('/api/produto/barcode/'+ $scope.codigo)
               .success(function(data){
                   if (data.success){
-                      $scope.lista=data.rows;              
+                      $scope.listaproduto=data.rows;              
                   }
                 })
                 .error(function (error) {
                     alert('Falha na obtenção da lista');
               });
-
-
 
         }, function(error){
               alert('Ocorreu o seguinte erro: ' + error);
@@ -58,7 +55,7 @@ angular.module('starter.controllers', [])
 
 
 //Carrega lista inicial
-       httpG.get('/api/listas/' + usuario.getValue())      
+  /*     httpG.get('/api/listas/' + usuario.getValue())      
           .success(function(data){            
             if (data.success){
               $scope.lista=data.rows;              
@@ -66,7 +63,9 @@ angular.module('starter.controllers', [])
           })
           .error(function (error) {
             alert('Falha na obtenção da lista');
-        });
+        });*/
+
+
 
 //Funcao para modal criar lista
        $ionicModal.fromTemplateUrl('lista-modal.html', {
@@ -81,33 +80,48 @@ angular.module('starter.controllers', [])
         }
 
 //salva a lista 
-      $scope.salvarLista = function() {
-          
-          alert($scope.modal.Descricao  +  "   " + usuario.getValue());
-           httpG.post('/api/listas/' + usuario.getValue(),{listaDescricao:$scope.modal.Descricao})
-          .success(function(data){
-              httpG.get('/api/listas/'+ usuario.getValue())
+
+    $scope.atualizarListas=function()
+    {
+
+      httpG.get('/api/listas/'+ usuario.getValue())
                 .success(function(data){
                   if (data.success){
                       $scope.lista=data.rows;              
+                    }
+                    else
+                    {
+                      alert("sem sucesso")
                     }
                   })
                   .error(function (error) {
                       alert('Falha na obtenção da lista');
                   });
-           
+
+
+    }
+
+  $scope.atualizarListas();
+
+      $scope.salvarLista = function() {
+                    
+           httpG.post('/api/listas/' + usuario.getValue(),{ListaDescricao:$scope.modal.Descricao})
+          .success(function(data){
+              $scope.atualizarListas();           
           })
           .error(function (error) {
-            alert('Falha na gravação da nova lista');
+            alert('Falha na gravação da nova lista' + error);
         });
 
             $scope.modal.hide();
+            $scope.atualizarListas();
         };
+
 
         $scope.$on('$destroy', function() {
             $scope.modal.remove();
         });
-
+    
 
     $scope.closeModal = function() {   
         $scope.Descricao="";
@@ -151,7 +165,7 @@ angular.module('starter.controllers', [])
             case 2:                  
                 httpG.delete('/api/lista/'+ idLista)
                   .success(function(data){
-                      httpG.get('/api/listas/'+ $rootScope.idUser)
+                      httpG.get('/api/listas/'+ usuario.getValue())
                       .success(function(data){
                         if (data.success){
                             $scope.lista=data.rows;              
@@ -213,13 +227,19 @@ angular.module('starter.controllers', [])
             if (data.success){
               $scope.lista=data.rows;
               $ionicLoading.hide();
+            }else
+            {
+
+              $ionicLoading.hide();
             }
           })
           .error(function (error) {
             alert('Falha na obtenção da lista');
+             $ionicLoading.hide();
         });
         }
               $scope.AtualizarLista(id_lista);
+
 
 
       $ionicModal.fromTemplateUrl('produto-modal.html',
@@ -266,8 +286,7 @@ angular.module('starter.controllers', [])
     $scope.Remover=function(idLista)
       {
 
-      
-      
+          
         httpG.delete('/api/listaprodutos/'+ idLista)
             .success(function(data){  
             if (data.success){          
@@ -296,6 +315,7 @@ angular.module('starter.controllers', [])
               })
             .error(function (error) {
                   alert('Falha na obtenção da lista');
+                   $ionicLoading.hide();
             });
 
                 alert('Produto removido da lista')                ;
@@ -303,6 +323,7 @@ angular.module('starter.controllers', [])
           })
           .error(function (error) {
             alert('Falha na exclusão do item');
+             $ionicLoading.hide();
           });        
 
 
@@ -319,9 +340,7 @@ angular.module('starter.controllers', [])
 .controller('ModalCtrl',['$scope','httpG','$ionicLoading', function($scope,httpG,$ionicLoading)
 {
 
-
-    
-
+  
 
     $scope.selecionarProduto=function(idProduto)
     {
@@ -436,8 +455,90 @@ angular.module('starter.controllers', [])
         });
     };
 
+
+    $scope.NovaConta=function()
+    {        
+        $location.path('registro');
+
+    }
+
+
     $scope.doLogOut = function () {
         httpG.removeToken();
         
     };
 }])
+
+
+.controller('RegistroController', ['$scope', '$location', 'httpG', function ($scope, $location, httpG) {
+        $scope.nuser = {}  ;      
+
+$scope.Cancelar=function()
+{
+  $location.path('login')
+
+}
+
+          $scope.AddUser=function()
+          {
+                
+            if ($scope.nuser.username==undefined)
+            {            
+              alert("Digite um nome de usuário")
+              return;
+            }
+            
+            if ($scope.nuser.email==undefined)
+            {
+                 alert("Digite um email válido")
+                 return;
+            }
+            
+            
+
+            if ($scope.nuser.password==undefined || $scope.nuser.password.length < 6 )
+            {
+
+               alert("A senha deve ter no minimo 6 caracteres")
+                return;
+            }
+
+
+            if ($scope.nuser.password != $scope.nuser.confirmpassword  )
+            {
+
+               alert("As senhas não conferem")
+                return;
+            }
+            
+              datUser = { username:$scope.nuser.username,
+                          email:$scope.nuser.email,
+                          password:$scope.nuser.password
+                        }
+
+
+            httpG.post('/api/users/', datUser)
+            .success(function(data)
+            {                
+
+              alert("Parabéns! Sua conta foi criada.")            
+              $location.path('login') 
+
+            })
+            .error(function()
+            {
+
+              alert("Não foi possivel criar a conta neste momento. Tente novamente mais tarde.")            
+            })
+
+
+              
+            
+              
+          }
+
+
+
+
+
+  }])

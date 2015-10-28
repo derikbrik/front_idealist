@@ -26,6 +26,12 @@ $stateProvider
       templateUrl: "templates/login.html",
       controller : 'LoginController'
     })
+
+.state('registro', {
+      url: "/registro",
+      templateUrl: "templates/registro.html",
+      controller : 'RegistroController'
+    })
   
   //Diretiva Abstrata
     .state('tab', {

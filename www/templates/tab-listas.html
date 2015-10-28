@@ -1,23 +1,41 @@
 
 <ion-view view-title="{{lista.ListaDescricao}}">
- <ion-nav-buttons side="left">
-          <button class="button button-icon button-clear ion-navicon" ng-click="openMenu()"></button>
-        </ion-nav-buttons>  
   
-  <ion-content class="has-header">
+  <ion-content class="has-header padding">
 
-Listas
-  <div class="list">
-      <a class="item" ng-repeat="lis in lista.rows"  on-double-tap="showMenuLista">
-          {{lis}}
-      </a>
-    </div>
+<h4>Configurações</h4>
+  <ul class="list">
+    <li class="item item-toggle">
+      Configuração 1
+     <label class="toggle toggle-dark">
+       <input type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+      Configuração 3
+     <label class="toggle toggle-dark">
+       <input type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
+    <li class="item item-toggle">
+      Configuração 4
+     <label class="toggle toggle-dark">
+       <input type="checkbox">
+       <div class="track">
+         <div class="handle"></div>
+       </div>
+     </label>
+  </li>
 
-    <a href="lista.listas"></a>
-    <a href=""></a>
-    <a href=""></a>
+</ul>
 
 
-   <h1>lista</h11>
+   
   </ion-content>
 </ion-view>

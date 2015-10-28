@@ -1,0 +1,39 @@
+
+  <ion-view title="IdealList">
+    <ion-content padding="true" scroll="" class='has-header padding'>    
+
+      <h1 class="dark">iDeaList</h1>
+    <h4 class="dark"> Criar nova conta de acesso</h4>
+    <div class="card">     
+
+        <div class="list list-inset padding">
+            <label class="item  item-inset item-input item-stacked-label" required>Nome de usuário
+              <input type="text" class="padding"placeholder="Digite um nome de usuário"  ng-model='nuser.username'>
+            </label>
+            
+            <label class="item item-input item-stacked-label"  required >Email: 
+              <input type="text" placeholder="Digite seu email"  ng-model='nuser.email' required>
+            </label>
+            
+            <label class="item item-input item-stacked-label">Senha: 
+                <input type="password" placeholder="Digite a senha" ng-model='nuser.password' required>
+            </label>
+
+            <label class="item item-input item-stacked-label">Confirmar Senha: 
+                <input type="password" placeholder="Confirme a senha" ng-model='nuser.confirmpassword' required>
+            </label>
+        </div>
+        
+
+        <div class="button-bar">
+       <button class="button button-block button-balanced" ng-click="AddUser()">
+       Criar conta
+       </button>       
+
+       <button class="button button-block button-balanced" ng-click="Cancelar()">
+        Voltar
+       </button>       
+        </div>
+      
+    </ion-content>
+  </ion-view>
